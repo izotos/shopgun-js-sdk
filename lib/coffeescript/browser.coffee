@@ -6,7 +6,7 @@ SGN.storage =
     cookie: require './storage/client-cookie'
 
 # Expose request handler.
-SGN.request = require './request/browser'
+SGN.request = require './request'
 
 # Expose the different kits.
 SGN.AuthKit = require './kits/auth'
@@ -48,21 +48,22 @@ SGN.config.bind 'change', (changedAttributes) ->
 
     return
 
-# Autoconfigure the SDK.
-scriptEl = document.getElementById 'sgn-sdk'
+# Autoconfigure the SDK in a browser.
+if document?
+    scriptEl = document.getElementById 'sgn-sdk'
 
-if scriptEl?
-    appKey = scriptEl.getAttribute 'data-app-key'
-    trackId = scriptEl.getAttribute 'data-track-id'
-    config = {}
+    if scriptEl?
+        appKey = scriptEl.getAttribute 'data-app-key'
+        trackId = scriptEl.getAttribute 'data-track-id'
+        config = {}
 
-    config.appKey = appKey if appKey?
-    config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
+        config.appKey = appKey if appKey?
+        config.eventTracker = new SGN.EventsKit.Tracker(trackId: trackId) if trackId?
 
-    SGN.config.set config
+        SGN.config.set config
 
-    # Look for paged publication widgets.
-    for el in document.querySelectorAll('.shopgun-paged-publication')
-        new SGN.PagedPublicationKit.Widget el
+        # Look for paged publication widgets.
+        for el in document.querySelectorAll('.shopgun-paged-publication')
+            new SGN.PagedPublicationKit.Widget el
 
 module.exports = SGN
