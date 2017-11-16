@@ -1,4 +1,4 @@
-SGN = require '../lib/coffeescript/node'
+SGN = require '../lib/coffeescript'
 appKey = '00j486xcipwzk2rmcbzfalpk4sgx9v3i'
 appSecret = '00j486xcipwg451xiucovj60t2buq5f6'
 

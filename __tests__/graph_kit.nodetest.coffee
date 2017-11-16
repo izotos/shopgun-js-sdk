@@ -1,4 +1,4 @@
-SGN = require '../lib/coffeescript/node'
+SGN = require '../lib/coffeescript'
 
 test 'Making a request in node.js', (done) ->
     SGN.GraphKit.request

@@ -1,4 +1,4 @@
-SGN = require '../dist/sgn-sdk.js'
+SGN = require '../lib/coffeescript'
 
 test 'isBrowser works right', ->
     expect(SGN.util.isBrowser()).toBeTruthy()

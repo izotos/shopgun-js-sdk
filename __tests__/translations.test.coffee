@@ -1,4 +1,4 @@
-SGN = require '../lib/coffeescript/node'
+SGN = require '../lib/coffeescript'
 
 describe 'SGN.translations', ->
     test 'can translate', ->

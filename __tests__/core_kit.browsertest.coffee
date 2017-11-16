@@ -1,4 +1,4 @@
-SGN = require '../lib/coffeescript/browser'
+SGN = require '../lib/coffeescript'
 appKey = '00j486xcipwzk2rmcbzfalpk4sgx9v3i'
 
 SGN.config.set
