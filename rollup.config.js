@@ -6,6 +6,7 @@ import filesize from "rollup-plugin-filesize";
 import path from "path";
 import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
+import globals from 'rollup-plugin-node-globals';
 
 var inputs = {
   // Long term we want to get rid of the separate entry points and
@@ -70,6 +71,7 @@ export default [
       commonjs({
         extensions: [".js", ".coffee"]
       }),
+      globals(),
       babel(),
       filesize(),
     ]
@@ -92,6 +94,7 @@ export default [
       commonjs({
         extensions: [".js", ".coffee"]
       }),
+      globals(),
       babel(),
       uglify({}, minify),
       filesize(),
