@@ -145,26 +145,27 @@ module.exports = (options = {}, callback) ->
                     title: hotspot.offer.heading
                     subtitle: hotspot.offer.pricing.currency + '' + hotspot.offer.pricing.price
 
-            hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
-                header: SGN.translations.t 'paged_publication.hotspot_picker.header'
-                x: e.verso.x
-                y: e.verso.y
-                hotspots: hotspots
+            if window? and document?
+                hotspotPicker = new SGN.PagedPublicationKit.HotspotPicker
+                    header: SGN.translations.t 'paged_publication.hotspot_picker.header'
+                    x: e.verso.x
+                    y: e.verso.y
+                    hotspots: hotspots
 
-            hotspotPicker.bind 'selected', (e) ->
-                callback data.hotspots[e.id]
-                hotspotPicker.destroy()
+                hotspotPicker.bind 'selected', (e) ->
+                    callback data.hotspots[e.id]
+                    hotspotPicker.destroy()
 
-                return
+                    return
 
-            hotspotPicker.bind 'destroyed', ->
-                hotspotPicker = null
-                viewer.el.focus()
+                hotspotPicker.bind 'destroyed', ->
+                    hotspotPicker = null
+                    viewer.el.focus()
 
-                return
+                    return
 
-            viewer.el.appendChild hotspotPicker.el
-            hotspotPicker.render().el.focus()
+                viewer.el.appendChild hotspotPicker.el
+                hotspotPicker.render().el.focus()
 
     SGN.util.async.parallel [fetch, fetchPages], (result) ->
         details = result[0][1]
