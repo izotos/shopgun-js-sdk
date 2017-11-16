@@ -8,27 +8,22 @@ import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
 import globals from 'rollup-plugin-node-globals';
 
-var inputs = {
-  // Long term we want to get rid of the separate entry points and
-  // instead have one entry point that behaves properly according to environment.
-  node: path.join(__dirname, "lib", "coffeescript", "node.coffee"),
-  browser: path.join(__dirname, "lib", "coffeescript", "browser.coffee"),
-};
+var input = path.join(__dirname, "lib", "coffeescript", "index.coffee");
 
 var outputs = {
   // Exclusive bundles(external `require`s untouched), for node, webpack etc.
-  jsCJS: path.join(__dirname, "dist", "sgn-sdk.cjs.js"), // CommonJS
-  jsES: path.join(__dirname, "dist", "sgn-sdk.es.js"), // ES Module
+  CJS: path.join(__dirname, "dist", "sgn-sdk.cjs.js"), // CommonJS
+  ES: path.join(__dirname, "dist", "sgn-sdk.es.js"), // ES Module
   // Inclusive bundles(external `require`s resolved), for browsers etc.
-  jsBrowser: path.join(__dirname, "dist", "sgn-sdk.js"),
-  jsBrowserMin: path.join(__dirname, "dist", "sgn-sdk.min.js"),
+  UMD: path.join(__dirname, "dist", "sgn-sdk.js"),
+  UMDMin: path.join(__dirname, "dist", "sgn-sdk.min.js"),
 };
 
 export default [
   {
-    input: inputs.node,
+    input,
     output: {
-      file: outputs.jsCJS,
+      file: outputs.CJS,
       format: "cjs"
     },
     plugins: [
@@ -40,9 +35,9 @@ export default [
     ]
   },
   {
-    input: inputs.node,
+    input,
     output: {
-      file: outputs.jsES,
+      file: outputs.ES,
       format: "es"
     },
     plugins: [
@@ -54,9 +49,9 @@ export default [
     ]
   },
   {
-    input: inputs.browser,
+    input,
     output: {
-      file: outputs.jsBrowser,
+      file: outputs.UMD,
       format: "umd",
       name: "SGN"
     },
@@ -77,9 +72,9 @@ export default [
     ]
   },
   {
-    input: inputs.browser,
+    input,
     output: {
-      file: outputs.jsBrowserMin,
+      file: outputs.UMDMin,
       format: "umd",
       name: "SGN"
     },
