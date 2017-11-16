@@ -1,8 +1,12 @@
 MicroEvent = require 'microevent'
-Gator = require 'gator'
 Mustache = require 'mustache'
 template = require './templates/hotspot-picker'
 keyCodes = require '../../key-codes'
+
+if window?.Element && !Element.prototype.matches
+    Element.prototype.matches =
+        Element.prototype.msMatchesSelector ||
+        Element.prototype.webkitMatchesSelector
 
 class PagedPublicationHotspotPicker
     constructor: (@options = {}) ->
@@ -40,13 +44,12 @@ class PagedPublicationHotspotPicker
 
         @el.addEventListener 'keyup', @keyUp.bind(@)
 
-        Gator(@el).on 'click', '[data-id]', ->
-            trigger 'selected', id: @getAttribute('data-id')
-
-            return
-
-        Gator(@el).on 'click', '[data-close]', @destroy.bind(@)
-
+        @el.addEventListener "click", e ->
+            if (e.target && e.target.matches("[data-id]"))
+                trigger 'selected', id: e.target.getAttribute 'data-id'
+            if (e.target && e.target.matches("[data-close]"))
+                @destroy
+        
         window.addEventListener 'resize', @resizeListener, false
 
         @
