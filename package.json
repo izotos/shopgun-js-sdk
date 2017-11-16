@@ -40,10 +40,14 @@
     "test:lint": "coffeelint lib/coffeescript __tests__",
     "test:ci": "jest --ci",
     "test:size": "bundlesize",
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev:js": "rollup -c -w -m",
+    "dev:css": "stylus -w lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
+    "dev": "run-p -l dev:js dev:css",
+    "build:js": "rollup -c -m",
+    "build:css": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.css --include-css -m",
+    "build:css-min": "stylus lib/stylus/sgn.styl -o dist/sgn-sdk.min.css --include-css -m -c",
+    "build": "run-p -l build:js build:css build:css-min",
     "serve": "python -m SimpleHTTPServer 8001",
-    "watch": "npm-watch build",
     "prepublishOnly": "npm run build"
   },
   "jest": {
@@ -79,11 +83,11 @@
     "coffeeify": "^3.0.0",
     "coffeelint": "^2.0.7",
     "coffeescript": "^2.0.2",
-    "cssnano": "^3.10.0",
     "gh-pages": "^1.0.0",
     "jest": "^21.2.1",
     "jest-cli": "^21.2.1",
     "nib": "^1.1.2",
+    "npm-run-all": "^4.1.2",
     "npm-watch": "^0.3.0",
     "rollup": "^0.50.0",
     "rollup-plugin-babel": "^3.0.2",
@@ -94,7 +98,6 @@
     "rollup-plugin-uglify": "^2.0.1",
     "stylus": "^0.54.5",
     "uglify-es": "^3.1.6",
-    "uglifycss": "0.0.27",
     "verso-browser": "^1.0.8"
   },
   "dependencies": {
