@@ -1,3 +1,5 @@
+require 'promise-polyfill'
+
 SGN = require './sgn'
 
 # Expose storage backends.

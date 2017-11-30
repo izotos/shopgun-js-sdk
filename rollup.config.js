@@ -6,22 +6,44 @@ import filesize from "rollup-plugin-filesize";
 import path from "path";
 import { minify } from "uglify-es";
 import babel from "rollup-plugin-babel";
-import globals from 'rollup-plugin-node-globals';
+import globals from "rollup-plugin-node-globals";
 
-var input = path.join(__dirname, "lib", "coffeescript", "index.coffee");
+var babelConfig = {
+  babelrc: false,
+  exclude: "node_modules/**",
+  presets: [
+    [
+      "@babel/preset-env",
+      {
+        targets: {
+          browsers: ["> 3%"],
+          node: 8
+        },
+        modules: false,
+        useBuiltIns: "usage"
+      }
+    ]
+  ]
+};
 
+var inputs = {
+  // Long term we want to get rid of the separate entry points and
+  // instead have one entry point that behaves properly according to environment.
+  node: path.join(__dirname, "lib", "coffeescript", "node.coffee"),
+  browser: path.join(__dirname, "lib", "coffeescript", "index.coffee")
+};
 var outputs = {
   // Exclusive bundles(external `require`s untouched), for node, webpack etc.
   CJS: path.join(__dirname, "dist", "sgn-sdk.cjs.js"), // CommonJS
   ES: path.join(__dirname, "dist", "sgn-sdk.es.js"), // ES Module
   // Inclusive bundles(external `require`s resolved), for browsers etc.
   UMD: path.join(__dirname, "dist", "sgn-sdk.js"),
-  UMDMin: path.join(__dirname, "dist", "sgn-sdk.min.js"),
+  UMDMin: path.join(__dirname, "dist", "sgn-sdk.min.js")
 };
 
 export default [
   {
-    input,
+    input: inputs.node,
     output: {
       file: outputs.CJS,
       format: "cjs"
@@ -31,11 +53,11 @@ export default [
       commonjs({
         extensions: [".js", ".coffee"]
       }),
-      babel()
+      babel(babelConfig)
     ]
   },
   {
-    input,
+    input: inputs.node,
     output: {
       file: outputs.ES,
       format: "es"
@@ -45,11 +67,11 @@ export default [
       commonjs({
         extensions: [".js", ".coffee"]
       }),
-      babel()
+      babel(babelConfig)
     ]
   },
   {
-    input,
+    input: inputs.browser,
     output: {
       file: outputs.UMD,
       format: "umd",
@@ -67,12 +89,11 @@ export default [
         extensions: [".js", ".coffee"]
       }),
       globals(),
-      babel(),
-      filesize(),
+      babel(babelConfig)
     ]
   },
   {
-    input,
+    input: inputs.browser,
     output: {
       file: outputs.UMDMin,
       format: "umd",
@@ -90,9 +111,8 @@ export default [
         extensions: [".js", ".coffee"]
       }),
       globals(),
-      babel(),
-      uglify({}, minify),
-      filesize(),
+      babel(babelConfig),
+      uglify({}, minify)
     ]
   }
 ];
